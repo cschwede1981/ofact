@@ -41,15 +41,10 @@ The process-oriented modeling approach suits especially for learning application
 ### Entities
 
 The ***entities*** describe the physical objects on the shop floor. 
+Entities are of a predefined type and have a quality value between 0 (bad) and 1 (good). 
+Next to them, they can be situated in another resource.
+
 Entities are differentiated between ***resources*** and ***parts***.
-
-Resources are entities that are used to process parts. 
-They can be e.g., machines, warehouses, storages, conveyor belts, 
-AGVs, conveyor belts, workers or other resources in the context of production and logistics.
-
-In contrast, parts are consumed and can be further differentiated into two main groups. 
-First, the products that are delivered to the customer and are associated with an order. 
-Second, parts that are processed, e.g., as subpart.
 
 The class structure is depicted in the following picture:
 
@@ -58,12 +53,67 @@ The class structure is depicted in the following picture:
   <h3>Entities classification</h3>
 </div>
 
+*Resources* are used to transform or change entities (including parts as well as resources).
+Next to the situation in another resource that has all entities, resources have a physical body 
+(with position, length and width). 
+Additionally, to handle chronological execution of the processes on the resources, 
+a process execution plan is used to plan the process executions.
+
+*Stationary resources* are used for resources that have a fixed position on the shop floor, such as a workbench, 
+a machine or even obstacles. 
+Additionally to the resources, they have an efficiency distribution that 
+can influence the process lead time. The entry edge and exit edge can be used for the transport resources 
+as starting point, respectively as arrival point.
+If needed, they can be further detailed to storages, warehouses, workstations and conveyor belts.
+*Storages* are used to store/ hold other resources or parts (entities). Each storage can only hold entities 
+of the same entity type (respectively super entity type). Therefore, a storage can be used as storage for parts, 
+a loading station for AGVs, a break room for the workers, etc.
+Next to the storage, the *warehouse* is used to manage different storages. 
+Therefore, entities with different entity types can be stored in the warehouses, respectively the storages of them.
+Note, with the storage and warehouse elements, different elements from the logistics such as supermarkets, shelves, etc. 
+can be modelled in an abstract way. If you should use a storage or a warehouse depends only on the amount 
+of entity types to be stored.
+The *workstation* can equally to the warehouse also hold different entity types (buffer stations). 
+However, workstations have differed in their resource purpose, since they are used to process 
+parts or resources (entities), which is not the inherent aim of the warehouses.
+*Conveyor belts* are used are resources that can transport resources or parts from their start to their end. 
+At the start and at the end, a storage is situated. Since they have, only one start and one end, forks are modelled 
+by using more than one conveyor belt element, linked through their origin and destination storages.
+A conveyor belt has additionally to stationary resources, a flow direction, entities that are currently 
+on the conveyor belt (as sorted queue) restricted by a capacity and allowed entity types. 
+Additionally, as stated before, the conveyor belt is defined through an origin and a destination storage. 
+The conveyor length and the pitch are also specified and can be used for the process lead time determination.
+
+In contrast to stationary resources, *non-stationary resources* can move by their self on the shop floor 
+(active moving resources) or moved by other resources (passive moving resources). 
+Similar to the stationary resources, also the non-stationary resources have storage places that can be used, e.g., 
+to transport other entities. 
+Next to them, the orientation is used to manage the direction of the resource.
+*Active moving resources* could be automated guided vehicles (AGVs), workers, forklifts, etc. 
+*Passive moving resources* are resources that are transported by other resources, such as tools, boxes, pallets, etc. 
+They cannot move by their own.
+While the stationary resources use the efficiency to determine the performance of the resource, 
+the non-stationary resources use the speed. 
+Additionally, the energy is managed through the attribute’s energy capacity, energy level and energy consumption.
+
+In contrast, *part*s are consumed and can be further differentiated into two main groups. 
+First, the products that are delivered to the customer and are associated with an order. 
+Second, parts that are processed, e.g., as subpart.
+Parts can be a (sub-)part of another part or contain parts themselves. 
+These parts can be removable or not.
 
 ### Sales
 
 In the ***sales*** area, the order object represents the core element. 
-The order contains a pool of features, that are chosen by a customer. 
-Eventually, the feature pool specifies a product configuration. 
+An order object is associated with a product configured by the customer.
+
+<div align="center">
+  <img src="docs/assets/imgs/sales unit.png" width="600" height="400" />
+  <h3>Connection from the sales area to the shop floor</h3>
+</div>
+
+The order contains a pool of features that are chosen by a customer. 
+Eventually, the feature pool specifies a product configuration that can be highly individual. 
 E.g., a bicycle that consists of a sport frame, a disc brake and other features. 
 If, for example, the disc brake is broken down further in a bill of materials, the feature can consist of several parts, 
 which are processed in one or more processes. The logic is taken from complex product configuration systems 
@@ -97,7 +147,7 @@ Each of them is a combination of different resources that are required to execut
 > 
 > Next to *'greater'* resources also tools can be part of a resource model.
 
-#### TRANSITION MODEL
+#### TRANSITION MODEL**
 
 The transition model outlines spatial position changes or resource assignments (e.g., from a box into the shelf).
 Therefore, it contains possible origins and destination. 

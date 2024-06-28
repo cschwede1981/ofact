@@ -1,6 +1,6 @@
 <div align="center">
 
-   <img src="docs/assets/imgs/ofact - logo.png" width="600" height="300" />
+   <img src="ofact/docs/assets/imgs/ofact - logo.png" width="600" height="300" />
    <h3>Open Factory Twin</h3> 
    <h4>Open source Digital Twin Framework for Production and Logistics</h4>
 
